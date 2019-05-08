@@ -31,6 +31,23 @@ Route::get('/category/delete/{id}', 'categoryController@delete');
 /* End category */
 
 
+/* inventory location*/
+Route::get('/location/manage','LocationController@manage')->name('location.manage');
+Route::get('/location/add','LocationController@create')->name('location.create');
+Route::post('/location/add','LocationController@store');
+Route::get('/location/edit/{id}','LocationController@edit')->name('location.edit');
+Route::post('/location/update','LocationController@update')->name('location.update');
+/* end inventory location*/
+
+
+/*  product purchase*/
+Route::get('/product/purchase','ProductPurchaseController@purchaseProduct')->name('purchase.product');
+Route::post('/product/purchase','ProductPurchaseController@savePurchaseProductIfo');
+/* end product purchase*/
+
+
+
+
 /*Start Unit*/
 Route::get('/unit/add', 'unitController@index');
 Route::post('/unit/save', 'unitController@save');
@@ -46,7 +63,7 @@ Route::post('/supplier/save', 'supplierController@save');
 Route::get('/supplier/manage', 'supplierController@manage');
 Route::get('/supplier/edit/{id}','supplierController@edit');
 Route::post('/supplier/update','supplierController@update');
-Route::get('/supplier/delete/{id}', 'supplierController@delete');
+
 /*end supplier*/
 
 /*start customer*/
@@ -72,12 +89,12 @@ Route::get('/tax/delete/{id}', 'taxController@delete');
 
 
 /*start product*/
-Route::get('/product/add', 'productController@index');
-Route::post('/product/save', 'productController@save');
+Route::get('/product/add', 'productController@index')->name('add.product');
+Route::post('/product/save', 'productController@save')->name('product.save');
 Route::get('/product/manage', 'productController@manage');
 Route::get('/product/edit/{id}','productController@edit');
-Route::post('/product/update','productController@update');
-Route::get('/product/delete/{id}', 'productController@delete');
+Route::post('/product/update','productController@update')->name('product.update');
+Route::get('/product/delete/{id}', 'productController@delete')->name('product.delete');
 /*end Product*/
 
 /*start bank*/

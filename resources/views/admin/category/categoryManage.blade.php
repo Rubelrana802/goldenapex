@@ -62,7 +62,7 @@
                     <tr class="text-center">
                         <td>{{ ++$i }}</td>
                         <td>{{ $row->category_name }}</td>
-                        <td>{{ ($row->status) == 1? 'Active' : 'Unactive' }}</td>
+                        <td>{{ ($row->status) == 1? 'Active' : 'Deactive' }}</td>
                         <td><a class="btn btn-info btn-sm" href="{{ url('/category/edit/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>   <a class="btn btn-danger btn-sm" href="{{ url('/category/delete/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a></td>
                     </tr>
                     @endforeach

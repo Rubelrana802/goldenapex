@@ -28,7 +28,7 @@
 
 	<div class="card">
 			     <div class="card-body">
-				   <div class="card-title">Add Category</div>
+				   <div class="card-title"> <i class="fa fa-plus"></i> Add Category</div>
 				   <hr>				   
 				    {!! Form::open(['url' => '/category/save','method'=>'post']) !!}
 				    <div class="row">

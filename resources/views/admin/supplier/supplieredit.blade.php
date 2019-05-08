@@ -1,76 +1,73 @@
 @extends('admin.master')
 
 @section('title')
-	Update Category
+	Update Supplier Information
 @endsection
 
 @section('mainContent')
 
+<br>
+    <section class="content">
+        <!-- Alert Message -->  
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="column">
+
+                    <a href="{{ url('/supplier/manage') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> Manage Supplier </a>
+                </div>
+            </div>
+        </div>
+        <br>
 	<div class="card">
 			     <div class="card-body">
-				   <div class="card-title">Supplier Information Category</div>
+				   <div class="card-title"> <i class="fa fa-edit"></i> Update Supplier</div>
 				   <hr>				   
-				    {!! Form::open(['url' => '/supplier/update/','method'=>'POST','name'=>'editform']) !!}
-
-				    <div class="form-group row">
-                            <label for="supplier_id" class="col-sm-3 col-form-label">Supplier ID : <i class="text-danger">*</i></label>
-                            <div class="col-sm-6">
-                                <input class="form-control" name ="supplier_id" id="supplier_id" type="text" placeholder="Supplier ID"  required="" tabindex="1" value="{{ $supplier_info->supplier_id }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="supplier_name" class="col-sm-3 col-form-label">Supplier Name : <i class="text-danger">*</i></label>
-                            <div class="col-sm-6">
-                                <input class="form-control" name ="supplier_name" id="supplier_name" type="text" placeholder="Supplier Name"  required="" tabindex="2" value="{{ $supplier_info->supplier_name }}">
-                            </div>
-                        </div>
-
-                       	<div class="form-group row">
-                            <label for="mobile" class="col-sm-3 col-form-label">Supplier Mobile : <i class="text-danger"></i></label>
-                            <div class="col-sm-6">
-                                <input class="form-control" name="mobile" id="mobile" type="text" placeholder="Supplier Mobile"  min="0" tabindex="3" value="{{ $supplier_info->mobile}}">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="address " class="col-sm-3 col-form-label">Supplier Address :</label>
-                            <div class="col-sm-6">
-                                <textarea class="form-control" name="address" id="address " rows="3" placeholder="Supplier Address" tabindex="4" value="{{ $supplier_info->address }}"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="details" class="col-sm-3 col-form-label">Supplier Details :</label>
-                            <div class="col-sm-6">
-                                <textarea class="form-control" name="details" id="details" rows="3" placeholder="Supplier Details" tabindex="5" value="{{ $supplier_info->details }}"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-					  <label for="input-4" class="col-sm-3 col-form-label">Status :</label>
-					  <div class="col-sm-6">
-						<select name="status" class="form-control">
-							<option value="1">Active</option>
-							<option value="0">Unactive</option>
-						</select>
-					  </div>
-					</div>
-
-					<input type="hidden" name="id" value="{{ $supplier_info->id }}">
+				    {!! Form::open(['url' => '/supplier/update','method'=>'post']) !!}
+				    <div class="row">
+			      		<div class="col-sm-2" role="alert">
+                  		</div>
+             		</div>
 					<div class="form-group row">
-					  <label for="input-1" class="col-sm-2 col-form-label"></label>
-					  <div class="col-sm-10">
-						<button type="submit" class="btn btn-primary shadow-primary px-5"></i> Save</button>
+                            <label for="name" class="col-sm-3 col-form-label">Supplier Name : <i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name ="name" id="name" type="text" value="{{$supplier_info->name}}"  required="" tabindex="1">
+                                <input  name ="id"  type="hidden" value="{{$supplier_info->id}}" >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="email" class="col-sm-3 col-form-label">Supplier Email : </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name ="email" id="email" type="email" value="{{$supplier_info->email}}"  required="" tabindex="2">
+                            </div>
+                        </div>
+                       	<div class="form-group row">
+                            <label for="mobile" class="col-sm-3 col-form-label">Supplier Mobile : <i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="mobile" id="mobile" type="text" value="{{$supplier_info->mobile}}"  min="0" tabindex="3">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="address " class="col-sm-3 col-form-label">Supplier Address : <i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" name="address" id="address " rows="3"  tabindex="4">{{$supplier_info->address}}</textarea>
+                            </div>
+                        </div>
+                        
+                       <div class="form-group row">
+                            <label for="previous_due" class="col-sm-3 col-form-label">Previous Due : </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="previous_due" id="previous_due" type="number" value="{{$supplier_info->previous_due}}" tabindex="6">
+                            </div>
+                        </div> 
+
+					<div class="form-group row">
+					  <label for="input-1" class="col-sm-3 col-form-label"></label>
+					  <div class="col-sm-6">
+						<button type="submit" class="btn btn-primary shadow-primary px-5"></i> Update</button>
 					  </div>
 					</div>
-
-					
 					{!! Form::close() !!}
 				 </div>
-
-				 <script type="text/javascript">
-				 	document.forms['editform'].elements['status'].value='{{ $supplier_info->status }}'
-				 </script>
-
 			   </div>
+
 @endsection

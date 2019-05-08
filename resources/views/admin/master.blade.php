@@ -25,7 +25,10 @@
   <link href="{{ asset('admin') }}/assets/css/sidebar-menu.css" rel="stylesheet"/>
   <!-- Custom Style-->
   <link href="{{ asset('admin') }}/assets/css/app-style.css" rel="stylesheet"/>
-  
+  <link href="{{ asset('admin') }}/assets/css/select2.min.css" rel="stylesheet"/>
+  @stack('style')
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 
 <body>
@@ -59,8 +62,10 @@
    
   </div><!--End wrapper-->
 
+
+
   <!-- Bootstrap core JavaScript-->
-  <script src="{{ asset('admin') }}/assets/js/jquery.min.js"></script>
+  <script src="{{ asset('admin/') }}/assets/js/jquery.min.js"></script>
   <script src="{{ asset('admin') }}/assets/js/popper.min.js"></script>
   <script src="{{ asset('admin') }}/assets/js/bootstrap.min.js"></script>
     
@@ -72,6 +77,7 @@
     <script src="{{ asset('admin') }}/assets/js/sidebar-menu.js"></script>
   <!-- Custom scripts -->
   <script src="{{ asset('admin') }}/assets/js/app-script.js"></script>
+  <script src="{{ asset('admin') }}/assets/js/select2.min.js"></script>
 
   <!--Data Tables js-->
   <script src="{{ asset('admin') }}/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
@@ -103,6 +109,8 @@
       } );
 
     </script>
+
+    @stack('script')
     
 </body>
 </html>

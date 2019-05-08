@@ -17,6 +17,7 @@ class CreateProductPurchaseDetailsTable extends Migration
             $table->increments('id');
             $table->integer('purchase_id');
             $table->integer('product_id');
+            $table->integer('inventory_id');
             $table->float('quantity');
             $table->float('rate');
             $table->float('total_amount');

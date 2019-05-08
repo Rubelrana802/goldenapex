@@ -3,7 +3,7 @@
 @section('mainContent')
 
 @section('title')
-	Manage Product
+	Manage Store
 @endsection
 
 <br>
@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="column">
-                    <a href="{{ route('add.product') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> Add Product </a>
+                    <a href="{{ route('location.create') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> Add Store </a>
                 </div>
             </div>
         </div>
@@ -35,33 +35,30 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
-            <div class="card-header"><i class="fa fa-table"></i> All Products Information </div>
+            <div class="card-header"><i class="fa fa-table"></i> All Stores Information </div>
             <div class="card-body">
               <div class="table-responsive">
               <table id="default-datatable" class="table table-bordered">
                 <thead>
                     <tr class="text-center">
-                    	<th>Product Name</th>
-                        <th>Product Code</th>
-                        <th>Purchase Price</th>
-                        <th>Sale Price</th>
+                    	<th>Store Name</th>
+                        <th>Mobile </th>
+                        <th>Address</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                        @forelse ($products as $product)
+                        @forelse ($locations as $location)
                     <tr>
                        
-                             <td>{{$product->product_name}}</td>
-                             <td>{{$product->product_code}}</td>
-                             <td>{{$product->purchase_price}}</td>
-                             <td>{{$product->sale_price}}</td>
-                             <td>{{$product->status == 1 ? 'Active' : 'Deactive'}}</td>
+                             <td>{{$location->name}}</td>
+                             <td>{{$location->mobile}}</td>
+                             <td>{{$location->address}}</td>
+                             <td>{{$location->status == 1 ? 'Active' : 'Deactive'}}</td>
                              <td>
-                                 <a class="btn btn-info btn-sm" href="{{ url('/product/edit/'.$product->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>  
-                                 <a class="btn btn-danger btn-sm "    href="{{ url('/product/delete/'.$product->id) }}" ><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a>
-                            </td>
+                                 <a class="btn btn-info btn-sm" href="{{ route('location.edit',$location->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>  
+                                      </td>
            
                     </tr>
                     @empty

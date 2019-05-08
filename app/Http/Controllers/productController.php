@@ -4,57 +4,70 @@ namespace App\Http\Controllers;
 
 use App\product;
 use App\category;
+use DB;
 use Illuminate\Http\Request;
+
 
 class productController extends Controller
 {
     public function index(){
-        $category = category::pluck('category_name', 'category_name');
-    	return view('admin.product.addproduct')->with(['category' => $category]);
+        $categories = category::where('status',1)->get();
+        // return $category;
+    	return view('admin.product.addproduct',[
+            'categories'=>$categories,
+        ]);
     }
 
     public function save(Request $request){
+
     	$products = new product();
     	$products->category_id = $request->category_id;
     	$products->product_name = $request->product_name;
-    	$products->price = $request->price;
-    	$products->unit = $request->unit;
-    	$products->tax = $request->tax;
-    	$products->serial_no = $request->serial_no;
-    	$products->product_model = $request->model;
-    	$products->product_details = $request->description;
-    	$products->image = $request->image;
+    	$products->product_code = $request->product_code;
+    	$products->purchase_price = $request->purchase_price;
+    	$products->sale_price = $request->sale_price;
     	$products->status = $request->status;
     	$products->save();
 
-    	return redirect('/product/manage')->with('message','Tax Added Successfully');
+    	return redirect('/product/manage')->with('message','Product Added Successfully');
     }
 
     public function manage(){
-        $category = category::all();
-        return view('admin.category.categoryManage')->with(['category' => $category]);
+        $products =  product::paginate(10);
+        $categories = category::where('status',1)->get();
+        return view('admin.product.manageproduct',[
+            'products' => $products
+        ]);
     }
 
     public function edit($id){
-        $products = unit::where('id',$id)->first();
-
-        return view('admin.unit.unitedit')->with(['unit' => $unitedit]);
+        $product = product::where('id',$id)->first();
+        $categories = category::where('status',1)->get();
+        return view('admin.product.editproduct',[
+            'product' => $product,
+            'categories' => $categories,
+        ]);
     }
 
     public function update(Request $request){
-        $unit = unit::find($request->id);
-        $unit->unit_name = $request->input('Uname');
-        $unit->status = $request->input('status');
-        $unit->save();
+        $product =  product::find($request->product_id);
+    	$product->category_id = $request->category_id;
+    	$product->product_name = $request->product_name;
+    	$product->product_code = $request->product_code;
+    	$product->purchase_price = $request->purchase_price;
+    	$product->sale_price = $request->sale_price;
+    	$product->status = $request->status;
+    	$product->save();
 
-        return redirect('/unit/manage')->with('message','Unit update Successfully.');
+    	return redirect('/product/manage')->with('message','Product Updated Successfully');
+
 
     }
 
     public function delete($id){
-        $unit = unit::find($id);
-        $unit->delete();
+        $delete = product::find($id);
+        $delete->delete();
 
-        return redirect('/unit/manage')->with('message','Unit Deleted Successfully.');
+        return redirect('/product/manage')->with('message','Product Deleted Successfully.');
     }
 }
