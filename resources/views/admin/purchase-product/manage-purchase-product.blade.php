@@ -3,7 +3,7 @@
 @section('mainContent')
 
 @section('title')
-	Manage Product
+	Manage Purchase Product
 @endsection
 
 <br>
@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="column">
-                    <a href="{{ route('add.product') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> Add Product </a>
+                    <a href="{{ route('purchase.product') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> Purchase  Product </a>
                 </div>
             </div>
         </div>
@@ -41,38 +41,51 @@
               <table id="default-datatable" class="table table-bordered">
                 <thead>
                     <tr class="text-center">
-                    	<th>Product Name</th>
-                        <th>Product Code</th>
-                        <th>Purchase Price</th>
-                        <th>Sale Price</th>
-                        <th>Status</th>
+                    	<th>Challan No</th>
+                        <th>Suplier Name</th>
+                        <th>Purchase Date</th>
+                        <th>Total Amount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                        @forelse ($products as $product)
+                       
+                        @forelse ($product_purchase as $product)
                     <tr>
                        
-                             <td>{{$product->product_name}}</td>
-                             <td>{{$product->product_code}}</td>
-                             <td>{{$product->purchase_price}}</td>
-                             <td>{{$product->sale_price}}</td>
-                             <td>{{$product->status == 1 ? 'Active' : 'Deactive'}}</td>
+                             <td>{{$product->challan_no}}</td>
                              <td>
-                                 <a class="btn btn-info btn-sm" href="{{ url('/product/edit/'.$product->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>  
-                                 <a class="btn btn-danger btn-sm "    href="{{ url('/product/delete/'.$product->id) }}" ><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a>
+                               @foreach ($suppliers as $supplier)
+                               {{$product->supplier_id == $supplier->id ? $supplier->name : '' }}
+                               @endforeach
+                               
+                              </td>
+                             <td>{{$product->purchase_date}}</td>
+                             <td>{{$product->grand_total_amount}}</td>
+                             
+                             <td>
+                                 <a class="btn btn-info btn-sm" href="{{ route('edit.purchase.product',$product->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>  
+                                 <a class="btn btn-danger btn-sm "    href="{{ route('delete.purchase.product',$product->id) }}" ><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a>
                             </td>
-           
+                           
                     </tr>
+                   
                     @empty
                             
                     @endforelse
+                    <tr>
+                        <td colspan="3" class="text-right"><b> Total Purchase Price : </b></td>
+                        <td>
+                          
+                          {{$totalPurchasePrice}}
+                      
+                        </td>
+                        <td></td>
+                      </tr>
                 </tbody>
-                <tbody>
-                	
-
-                </tbody>
+                
             </table>
+            {{$product_purchase->links()}}
             </div>
             </div>
           </div>

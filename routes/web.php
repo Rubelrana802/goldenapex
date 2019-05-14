@@ -13,8 +13,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Add invoice */
 Route::get('/invoice/new', 'invoiceController@index');
-Route::post('/invoice/manage', 'invoiceController@save');
-Route::get('/invoice/pos', 'invoiceController@pos');
+Route::post('/invoice/save', 'invoiceController@save');
+Route::get('/invoice/create', 'invoiceController@create');
 Route::get('/invoice/edit/{id}', 'invoiceController@edit');
 Route::post('/invoice/edit', 'invoiceController@update');
 Route::get('/invoice/delete/{id}', 'invoiceController@delete');
@@ -43,6 +43,11 @@ Route::post('/location/update','LocationController@update')->name('location.upda
 /*  product purchase*/
 Route::get('/product/purchase','ProductPurchaseController@purchaseProduct')->name('purchase.product');
 Route::post('/product/purchase','ProductPurchaseController@savePurchaseProductIfo');
+Route::get('/manage/product/purchase','ProductPurchaseController@managePurchaseProduct')->name('manage.purchase.product');
+Route::get('/edit/product/purchase/{id}','ProductPurchaseController@editPurchaseProduct')->name('edit.purchase.product');
+Route::post('/update/product/purchase','ProductPurchaseController@updatePurchaseProduct')->name('update.purchase.product');
+Route::get('/delete/product/purchase/{id}','ProductPurchaseController@deletePurchaseProduct')->name('delete.purchase.product');
+
 /* end product purchase*/
 
 

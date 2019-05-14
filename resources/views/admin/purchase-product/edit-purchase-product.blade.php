@@ -2,7 +2,7 @@
 @extends('admin.master')
 
 @section('title')
-	purchase product
+	update purchase product
 @endsection
 
 @section('mainContent')
@@ -13,13 +13,13 @@
             <div class="col-sm-12">
                 <div class="column">
 
-                    <a href="{{ url('/product/manage') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> Manage Purchase Product </a>
+                    <a href="{{ route('manage.purchase.product') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> Manage Purchase Product </a>
 
                 </div>
             </div>
         </div>
         <br>
-            <form action="{{route('purchase.product')}}" class="form-vertical" id="insert_purchase" name="insert_purchase" enctype="multipart/form-data" method="post" accept-charset="utf-8" novalidate="novalidate">
+            <form action="{{route('update.purchase.product')}}" class="form-vertical" id="insert_purchase" name="insert_purchase" enctype="multipart/form-data" method="post" accept-charset="utf-8" novalidate="novalidate">
                         {{csrf_field()}}
             <div class="row">
                                         <div class="col-sm-6">
@@ -27,9 +27,9 @@
                                                 <label for="supplier_id" class="col-sm-4 col-form-label">Supplier : </label>
                                                 <div class="col-sm-8">
                                                     <select class="form-control" id="supplier_id" name="supplier_id" tabindex="3">
-                                                        <option value="">--Select One--</option>
+                                                       
                                                         @foreach ($suppliers as $supplier)
-                                                        <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                                        <option value="{{$supplier->id}}" {{$product_purchase->supplier_id == $supplier->id ? 'selected': ''}}>{{$supplier->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -39,7 +39,8 @@
                                             <div class="form-group row">
                                                 <label for="purchase_date" class="col-sm-4 col-form-label">Purchase Date : </label>
                                                 <div class="col-sm-8">
-                                                    <input type="date"  class="form-control"name="purchase_date"    />
+                                                    <input type="date"  class="form-control"name="purchase_date" value="{{$product_purchase->purchase_date}}"    />
+                                                    <input type="hidden"  name="purchase_id" value="{{$product_purchase->id}}"    />
                                                 </div>
                                             </div>
                                         </div>
@@ -53,9 +54,9 @@
                                                         <label for="payment_type" class="col-sm-4 col-form-label">Payment Type : </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" id="payment_type" name="payment_type" >
-                                                                <option value="">Select One</option>                                          
-                                                                <option value="Due">Due </option>
-                                                                <option value="Paid">Paid</option>
+                                                                                                      
+                                                                <option value="Due" {{$product_purchase->supplier_id == 'Due' ? 'selected': ''}}>Due </option>
+                                                                <option value="Paid" {{$product_purchase->supplier_id == 'Paid' ? 'selected': ''}}>Paid</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -65,9 +66,9 @@
                                                         <label for="unit" class="col-sm-4 col-form-label">Status : </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" id="unit" name="status" >
-                                                                <option value="">Select One</option>                                          
-                                                                <option value="1">Active</option>
-                                                                <option value="0">Deactive</option>
+                                                                                                         
+                                                                <option value="1" {{$product_purchase->supplier_id == 1 ? 'selected': ''}}>Active</option>
+                                                                <option value="0" {{$product_purchase->supplier_id == 0 ? 'selected': ''}}>Deactive</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -81,9 +82,11 @@
                                                         <label for="unit" class="col-sm-4 col-form-label">Sotre : </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" id="unit" name="inventory_id" >
-                                                                <option value="">Select One</option>                                          
+                                                                                                        
                                                                 @foreach ($locations as $location)
-                                                                <option value="{{$location->id}}">{{$location->name}}</option>
+                                                                <option value="{{$location->id}}" @foreach ($product_purchase_details as $item)
+                                                                    {{$item->inventory_id == $location->id ? 'selected': ''}} 
+                                                                @endforeach >{{$location->name}}</option>
                                                                 @endforeach
                                                                
                                                             </select>
@@ -94,7 +97,7 @@
                                                     <div class="form-group row">
                                                         <label for="challan_no" class="col-sm-4 col-form-label">Challan No : </label>
                                                         <div class="col-sm-8">
-                                                            <input type="text"  class="form-control"  name="challan_no" placeholder="Challan No "  required />
+                                                            <input type="text"  class="form-control"  name="challan_no" placeholder="Challan No " value="{{$product_purchase->challan_no}}" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -107,7 +110,7 @@
                                                 <div class="form-group row">
                                                     <label for="purchase_details" class="col-sm-2 col-form-label">Purchase Details : <i class="text-danger">*</i> </label>
                                                     <div class="col-sm-10">
-                                                        <textarea name="purchase_details" id="purchase_details" class="form-control" rows="4"></textarea>
+                                                        <textarea name="purchase_details" id="purchase_details" class="form-control" rows="4">{!! $product_purchase->purchase_details !!}</textarea>
                                                     </div>
                                                 </div> 
                                             </div>
@@ -126,19 +129,22 @@
                                     <th class="text-center">Qnty <i class="text-danger">*</i></th>
                                     <th class="text-center">Rate<i class="text-danger">*</i></th>
                                     <th class="text-center">Total</th>
-                                    <th class="text-center">Action</th>
+                                   
                                 </tr>
                         </thead>
                         <tbody id="addPurchaseItem">
+                                @foreach ($product_purchase_details as $purchase_details)
                             <tr>
+                                
                                 <td class="span3 supplier">
                                         <select class="form-control" id="unit" name="products_id[]" >
-                                                <option value="">Select One</option>                                          
+                                                                                  
                                                 @foreach ($products as $product)
-                                                <option value="{{$product->id}}">{{$product->product_name}}</option>
+                                                <option value="{{$product->id}}" {{$purchase_details->product_id == $product->id ? 'selected': ''}} >{{$product->product_name}}</option>
                                                 @endforeach
                                                
                                             </select>
+                                            <input type="hidden" name="purchase_details_id[]" value="{{$purchase_details->id}}" >
                                    <input type="hidden" name="product_code" required="" class="form-control product_code productSelection" onkeypress="product_pur_or_list(1);" placeholder="Item code" id="product_code_1" tabindex="5" aria-required="true" autocomplete="off">
 
                                     <input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" autocomplete="off">
@@ -155,23 +161,21 @@
                                     </td>
                                 
                                     <td class="text-right">
-                                        <input type="text" name="product_quantity[]" id="cartoon_1" class="form-control text-right store_cal_1" onkeyup="calculate_store(1);" onchange="calculate_store(1);" placeholder="0.00" value="" min="0" tabindex="6" autocomplete="off">
+                                        <input type="number" name="product_quantity[]"  id="cartoon_1" class="form-control text-right store_cal_1" onkeyup="calculate_store(1);" onchange="calculate_store(1);" value="{{$purchase_details->quantity}}"   tabindex="6" autocomplete="off">
                                     </td>
                                     <td class="test">
-                                        <input type="text" name="product_rate[]" onkeyup="calculate_store(1);" onchange="calculate_store(1);" id="product_rate_1" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" autocomplete="off">
+                                        <input type="number" name="product_rate[]"  onkeyup="calculate_store(1);" onchange="calculate_store(1);" id="product_rate_1" class="form-control product_rate_1 text-right" value="{{$purchase_details->rate}}"    tabindex="7" autocomplete="off">
                                     </td>
                                    
 
                                     <td class="text-right">
-                                        <input class="form-control total_price text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" autocomplete="off">
+                                        @php($total_price = $purchase_details->quantity * $purchase_details->rate )
+                                        <input class="form-control total_price text-right" type="text" name="total_price[]" id="total_price_1" value="{{$total_price}}" readonly="readonly" autocomplete="off">
                                     </td>
-                                    <td>
-
-                                       
-
-                                        <button style="text-align: right;" class="btn btn-danger red" type="button" value="Delete" disabled  tabindex="8" autocomplete="off">Delete</button>
-                                    </td>
+                                 
+                                
                             </tr>
+                            @endforeach
                         </tbody>
                         <tfoot>
                                      <tr>
@@ -223,7 +227,7 @@
 
   
 
-@push('script')
+{{-- @push('script')
 
         <script src="{{asset('admin/assets/js/product_purchase.js.php')}}"></script>
         <script src="{{asset('admin/assets/js/numberconverter.js')}}"></script>
@@ -315,4 +319,4 @@
 
     </script>
 
-@endpush
+@endpush --}}
