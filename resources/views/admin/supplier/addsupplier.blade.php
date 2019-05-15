@@ -20,7 +20,7 @@
         <br>
 	<div class="card">
 			     <div class="card-body">
-				   <div class="card-title">Add Supplier</div>
+				   <div class="card-title"> <i class="fa fa-plus"></i> Add Supplier</div>
 				   <hr>				   
 				    {!! Form::open(['url' => '/supplier/save','method'=>'post']) !!}
 				    <div class="row">
@@ -28,50 +28,36 @@
                   		</div>
              		</div>
 					<div class="form-group row">
-                            <label for="supplier_id" class="col-sm-3 col-form-label">Supplier ID : <i class="text-danger">*</i></label>
+                            <label for="name" class="col-sm-3 col-form-label">Supplier Name : <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input class="form-control" name ="supplier_id" id="supplier_id" type="text" placeholder="Supplier ID"  required="" tabindex="1">
+                                <input class="form-control" name ="name" id="name" type="text" placeholder="Supplier Name "  required="" tabindex="1">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="supplier_name" class="col-sm-3 col-form-label">Supplier Name : <i class="text-danger">*</i></label>
+                            <label for="email" class="col-sm-3 col-form-label">Supplier Email : </label>
                             <div class="col-sm-6">
-                                <input class="form-control" name ="supplier_name" id="supplier_name" type="text" placeholder="Supplier Name"  required="" tabindex="2">
+                                <input class="form-control" name ="email" id="email" type="email" placeholder="Supplier Email"  required="" tabindex="2">
                             </div>
                         </div>
                        	<div class="form-group row">
-                            <label for="mobile" class="col-sm-3 col-form-label">Supplier Mobile : <i class="text-danger"></i></label>
+                            <label for="mobile" class="col-sm-3 col-form-label">Supplier Mobile : <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
                                 <input class="form-control" name="mobile" id="mobile" type="text" placeholder="Supplier Mobile"  min="0" tabindex="3">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="address " class="col-sm-3 col-form-label">Supplier Address :</label>
+                            <label for="address " class="col-sm-3 col-form-label">Supplier Address : <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
                                 <textarea class="form-control" name="address" id="address " rows="3" placeholder="Supplier Address" tabindex="4"></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="details" class="col-sm-3 col-form-label">Supplier Details :</label>
+                        
+                       <div class="form-group row">
+                            <label for="previous_due" class="col-sm-3 col-form-label">Previous Due : </label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" name="details" id="details" rows="3" placeholder="Supplier Details" tabindex="5"></textarea>
+                                <input class="form-control" name="previous_due" id="previous_due" type="number" placeholder="Previous Due" tabindex="6">
                             </div>
-                        </div>
-                        <div class="form-group row">
-					  <label for="input-4" class="col-sm-3 col-form-label">Status :</label>
-					  <div class="col-sm-6">
-						<select name="status" class="form-control">
-							<option value="1">Active</option>
-							<option value="0">Unactive</option>
-						</select>
-					  </div>
-					</div>
-                       <!--  <div class="form-group row">
-                            <label for="previous_balance" class="col-sm-3 col-form-label">Previous Credit Balance</label>
-                            <div class="col-sm-6">
-                                <input class="form-control" name="previous_balance" id="previous_balance" type="number" placeholder="Previous Credit Balance" tabindex="6">
-                            </div>
-                        </div> -->
+                        </div> 
 
 					<div class="form-group row">
 					  <label for="input-1" class="col-sm-3 col-form-label"></label>

@@ -15,9 +15,8 @@
           <span>Invoice</span> <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="sidebar-submenu">
-        <li><a href="{{ url('/invoice/new') }}"><i class="fa fa-circle-o"></i> New Invoice</a></li>
+        <li><a href="{{ url('/invoice/create') }}"><i class="fa fa-circle-o"></i> New Invoice</a></li>
         <li><a href="{{ url('/invoice/manage') }}"><i class="fa fa-circle-o"></i> Manage Invoice</a></li>
-        <!-- <li><a href="{{ url('/invoice/pos') }}"><i class="fa fa-circle-o"></i> POS Invoice</a></li> -->
         </ul>
       </li>  
 
@@ -31,6 +30,18 @@
   		  <li><a href="{{ url('/category/manage') }}"><i class="fa fa-circle-o"></i> Manage Category</a></li>
         </ul>
       </li>
+
+      <li>
+        <a href="javaScript:void();" class="waves-effect">
+          <i class="ti-tag"></i>
+          <span>Inventory Location</span> <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="sidebar-submenu">
+  		  <li><a href="{{ route('location.create') }}"><i class="fa fa-circle-o"></i> Add Store</a></li>
+  		  <li><a href="{{ url('/category/manage') }}"><i class="fa fa-circle-o"></i> Manage Store</a></li>
+        </ul>
+      </li>
+
 
       <li>
         <a href="javaScript:void();" class="waves-effect">
@@ -88,8 +99,8 @@
           <span>Purchase</span> <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="sidebar-submenu">
-        <li><a href="{{ url('/purchase/add') }}"><i class="fa fa-circle-o"></i> Add Purchase</a></li>
-        <li><a href="{{ url('/purchase/manage') }}"><i class="fa fa-circle-o"></i> Manage Purchase</a></li>
+        <li><a href="{{ route('purchase.product') }}"><i class="fa fa-circle-o"></i> Add Purchase</a></li>
+        <li><a href="{{ route('manage.purchase.product') }}"><i class="fa fa-circle-o"></i> Manage Purchase</a></li>
         <li><a href="{{ url('/purchase/return') }}"><i class="fa fa-circle-o"></i> Supplier Return Invoice</a></li>
         <li><a href="{{ url('/purchase/payment') }}"><i class="fa fa-circle-o"></i> Supplier Payment</a></li>
         <li><a href="{{ url('/purchase/manage') }}"><i class="fa fa-circle-o"></i> Purchase Report</a></li>

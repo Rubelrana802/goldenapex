@@ -15,13 +15,14 @@ class CreateProductPurchasesTable extends Migration
     {
         Schema::create('product_purchases', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('chalan_no');
+            $table->string('challan_no');
             $table->integer('supplier_id');
             $table->float('grand_total_amount');
             $table->float('total_discount');
             $table->string('purchase_date');
+            $table->string('payment_type');
             $table->text('purchase_details');
-            $table->boolean('status')->default(true);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

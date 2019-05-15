@@ -11,9 +11,6 @@
         $("form :input").attr("autocomplete", "off");
     })
 </script>
-<script src="http://softest8.bdtask.com/saleserp_multistor/my-assets/js/admin_js/json/product_invoice.js.php" ></script>
-<!-- Invoice js -->
-<script src="http://softest8.bdtask.com/saleserp_multistor/my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 
 <!-- Add new invoice start -->
 <style>
@@ -27,33 +24,7 @@
     }
 </style>
 
-<!-- Customer type change by javascript start -->
-<script type="text/javascript">
-    function bank_info_show(payment_type)
-    {
-        if (payment_type.value == "1") {
-            document.getElementById("bank_info_hide").style.display = "none";
-        } else {
-            document.getElementById("bank_info_hide").style.display = "block";
-        }
-    }
 
-    function active_customer(status)
-    {
-        if (status == "payment_from_2") {
-            document.getElementById("payment_from_2").style.display = "none";
-            document.getElementById("payment_from_1").style.display = "block";
-            document.getElementById("myRadioButton_2").checked = false;
-            document.getElementById("myRadioButton_1").checked = true;
-        } else {
-            document.getElementById("payment_from_1").style.display = "none";
-            document.getElementById("payment_from_2").style.display = "block";
-            document.getElementById("myRadioButton_2").checked = false;
-            document.getElementById("myRadioButton_1").checked = true;
-        }
-    }
-</script>
-<!-- Customer type change by javascript end -->
 <!-- Alert Message -->
 <div class="row">
     <div class="col-sm-12">
@@ -110,7 +81,7 @@
                             <hr>
                         </div>
                     </div>
-                    <form action="{{url('/invoice/save')}}" class="form-vertical" id="" name="" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                    <form action="{{url('/invoice/update')}}" class="form-vertical" id="" name="" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     @csrf
                         <div class="card-body">
                         <div class="row">
@@ -121,7 +92,7 @@
                                                 <select name="customer_id" class="form-control" required="">
                                                     <option value="">Select Customer</option>
                                                     @forelse ($customer_info as $customer)
-                                                    <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                                    <option value="{{$customer->id}}" {{$invoice->customer_id == $customer->id ? 'selected' : ''}} >{{$customer->customer_name}}</option>
                                                     @empty
                                                     <option >No Customer Available</option>
                                                     @endforelse
@@ -135,7 +106,7 @@
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-4 col-form-label">Date <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
-                                        <input class="datepicker form-control" type="date"  name="date" id="date" required  />
+                                    <input class="datepicker form-control" type="date"  name="date" id="date" value="{{$invoice->date}}" required  />
                                     </div>
                                 </div>
                             </div>
@@ -144,9 +115,9 @@
                                     <label for="payment_type" class="col-sm-4 col-form-label">Payment Type <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
                                         <select name="payment_type" class="form-control" required="">
-                                            <option value="">Select Payment Option</option>
-                                            <option value="Cash">Cash Payment</option>
-                                            <option value="Due">Due Payment</option>
+                                           
+                                            <option value="Cash" {{$invoice->payment_type == 'Cash' ? 'selected' : ''}}>Cash Payment</option>
+                                            <option value="Due" {{$invoice->payment_type == 'Due' ? 'selected' : ''}}>Due Payment</option>
                                         </select>                                     
                                     </div>
                                 </div>
@@ -157,9 +128,9 @@
                                         <label for="status" class="col-sm-4 col-form-label">Select Status <i class="text-danger">*</i></label>
                                         <div class="col-sm-8">
                                             <select name="status" class="form-control" required="">
-                                                <option value="">Select Status</option>
-                                                <option value="0">Active</option>
-                                                <option value="1">Inactive</option>
+                                               
+                                                <option value="0" {{$invoice->status == 0 ? 'selected' : ''}} >Active</option>
+                                                <option value="1"  {{$invoice->status == 1 ? 'selected' : ''}}>Inactive</option>
                                             </select>                                     
                                         </div>
                                     </div>
@@ -174,13 +145,15 @@
                                             <select name="inventory_id" class="form-control" required="">
                                                 <option value="">Select Store</option>
                                                 @forelse ($locations as $location)
-                                                <option value="{{$location->id}}">{{$location->name}}</option>
+                                                <option value="{{$location->id}}" {{$invoice->inventory_id == $location->id ? 'selected' : ''}} >{{$location->name}}</option>
                                                 @empty
-                                                <option >No Customer Available</option>
+                                                <option >No Store Available</option>
                                                 @endforelse
                                                 
                                                 
-                                            </select>                                     
+                                            </select>    
+                                            
+                                            <input type="hidden" name="invoice_detail_id" value="{{$invoice->id}}">
                                         </div>
                                     </div>
                       </div>
@@ -189,7 +162,7 @@
                             <div class="form-group row">
                                 <label for="customer_name" class="col-sm-2 col-form-label">Invoice Detail <i class="text-danger">*</i></label>
                                 <div class="col-sm-10">
-                                    <textarea name="invoice_details" class="form-control" cols="10" rows="5"></textarea>
+                                <textarea name="invoice_details" class="form-control" cols="10" rows="5">{{$invoice->invoice_details}}</textarea>
                                 </div>
                              
                             </div>
@@ -219,43 +192,50 @@
                                     </tr>
                                 </thead>
                                 <tbody id="addinvoiceItem">
+                                    @forelse ($invoice_details as $invoice_detail)
                                     <tr>
-                                         <td>
-                                             <select name="product_id[]" class="form-control">
-                                                 <option value="">Select Product</option>
-                                                 @foreach ($products as $product)
-                                                     <option value="{{$product->id}}">{{$product->product_name}}</option>
-                                                 @endforeach
-                                             </select>
-                                            <input name="product_code" type="hidden" id="product_code" class="form-control text-left productSelection" value="" onkeypress="invoice_productList(1);"  type="text" placeholder="item code">
-                                             <input type="hidden" class="autocomplete_hidden_value product_id_1" name="products_id[]" id="SchoolHiddenId"/>
-
-                                        </td>
-                                        <td style="width: 220px">
-                                            <input type="text" name="product_name" class="form-control product_name_1" placeholder='Item Name' required="" id="product_name_1" tabindex="7" readonly='readonly'>
-
-                                           
-                                            <input type="hidden" class="baseUrl" value="http://softest8.bdtask.com/saleserp_multistor/" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
-                                        </td>
-                                       
-                                        <td>
-                                            <input type="text" name="product_quantity[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" required="required"/>
-                                        </td>
-                                        <td style="width: 140px">
-                                            <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0" />
-                                        </td>
-                                        <!-- Discount -->
-                                      <td style="width: 100px">
-                                            <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
-                                        </td>
-
-                                        <td>
-                                           
-                                        </td>
-                                    </tr>
+                                            <td>
+                                                <select name="product_id[]" class="form-control">
+                                                    <option value="">Select Product</option>
+                                                    @foreach ($products as $product)
+                                                        <option value="{{$product->id}}" {{$invoice_detail->product_id == $product->id ? 'selected' : '' }} >{{$product->product_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                               <input name="product_code" type="hidden" id="product_code" class="form-control text-left productSelection" value="" onkeypress="invoice_productList(1);"  type="text" placeholder="item code">
+                                                <input type="hidden" class="autocomplete_hidden_value product_id_1" name="products_id[]" id="SchoolHiddenId"/>
+   
+                                           </td>
+                                           <td style="width: 220px">
+                                               <input type="text" name="product_name" class="form-control product_name_1" placeholder='Item Name' required="" id="product_name_1" tabindex="7" readonly='readonly'>
+   
+                                              
+                                               <input type="hidden" class="baseUrl" value="http://softest8.bdtask.com/saleserp_multistor/" />
+                                           </td>
+                                           <td>
+                                               <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_1"  readonly="" />
+                                           </td>
+                                          
+                                           <td>
+                                               <input type="text" name="product_quantity[]" onkeyup="quantity_calculate(1);" value="{{$invoice_detail->quantity}}" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1"  min="0" tabindex="8" required="required"/>
+                                           </td>
+                                           <td style="width: 140px">
+                                               <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" value="{{$invoice_detail->rate}}"  tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  min="0" />
+                                           </td>
+                                           <!-- Discount -->
+                                           @php($total = $invoice_detail->quantity * $invoice_detail->rate)
+                                         <td style="width: 100px">
+                                               <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="{{$total}}" readonly="readonly" />
+                                           </td>
+   
+                                           <td>
+                                              
+                                           </td>
+                                       </tr>
+                                    @empty
+                                        
+                                    @endforelse
+                                    
                                 </tbody>
                                 <tfoot>
                                 <tr>

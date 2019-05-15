@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\supplier_info;
+use App\Supplier;
 
 class supplierController extends Controller
 {
@@ -12,47 +12,40 @@ class supplierController extends Controller
     }
 
     public function save(Request $request){
-    	$supplieradd = new supplier_info();
-    	$supplieradd->supplier_id = $request->supplier_id;
-    	$supplieradd->supplier_name = $request->supplier_name;
-    	$supplieradd->address = $request->address;
+    	$supplieradd = new Supplier();
+    	$supplieradd->name = $request->name;
+    	$supplieradd->email = $request->email;
     	$supplieradd->mobile = $request->mobile;
-    	$supplieradd->details = $request->details;
-    	$supplieradd->status = $request->status;
+    	$supplieradd->previous_due = $request->previous_due;
+    	$supplieradd->address = $request->address;
     	$supplieradd->save();
 
     	return redirect('/supplier/manage')->with('message','Supplier Information added Successfully.');
     }
 
     public function manage(){
-    	$supplier_info = supplier_info::all();
+    	$supplier_info = Supplier::all();
     	return view('admin.supplier.managesupplier')->with(['supplier_info'  => $supplier_info ]);
     }
 
     public function edit($id){
-        $supplier_info = supplier_info::where('id',$id)->first();
+		$supplier_info = Supplier::find($id);
 
         return view('admin.supplier.supplieredit')->with(['supplier_info' => $supplier_info]);
     }
 
     public function update(Request $request){
-        $supplier_info = supplier_info::find($request->id);
-        $supplier_info->supplier_id = $request->input('supplier_id');
-        $supplier_info->supplier_name = $request->input('supplier_name');
-        $supplier_info->address = $request->input('address');
-        $supplier_info->mobile = $request->input('mobile');
-        $supplier_info->details = $request->input('details');
-        $supplier_info->status = $request->input('status');
-        $supplier_info->save();
+        $supplieradd =  Supplier::find($request->id);
+    	$supplieradd->name = $request->name;
+    	$supplieradd->email = $request->email;
+    	$supplieradd->mobile = $request->mobile;
+    	$supplieradd->previous_due = $request->previous_due;
+    	$supplieradd->address = $request->address;
+    	$supplieradd->save();
 
         return redirect('/supplier/manage')->with('message','Supplier Information update Successfully.');
 
     }
 
-    public function delete($id){
-        $supplier_info = supplier_info::find($id);
-        $supplier_info->delete();
-
-        return redirect('/supplier/manage')->with('message','Supplier Information Deleted Successfully.');
-    }
+ 
 }

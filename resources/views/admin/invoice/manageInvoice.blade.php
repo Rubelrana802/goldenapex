@@ -3,7 +3,7 @@
 @section('mainContent')
 
 @section('title')
-	Manage Category
+	Manage Invoice
 @endsection
 
 <br>
@@ -31,7 +31,7 @@
             <div class="col-sm-12">
                 <div class="column">
 
-                    <a href="{{ url('/category/save') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> Add Category </a>
+                    <a href="{{ url('/invoice/create') }}" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> New Invoice </a>
 
                 </div>
             </div>
@@ -43,30 +43,46 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
-            <div class="card-header"><i class="fa fa-table"></i> All Category </div>
+            <div class="card-header"><i class="fa fa-table"></i> All Invoice </div>
             <div class="card-body">
               <div class="table-responsive">
               <table id="default-datatable" class="table table-bordered">
                 <thead>
                     <tr class="text-center">
-                    	<th>Category ID</th>
-                        <th>Category Name</th>
-                        <th>Status</th>
+                    	<th>Sl :</th>
+                        <th>Customer Name</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                 	<?php $i=0; ?>
 
-                	@foreach($category as $row)
+                	@foreach($invoice as $row)
                     <tr class="text-center">
                         <td>{{ ++$i }}</td>
-                        <td>{{ $row->category_name }}</td>
-                        <td>{{ ($row->status) == 1? 'Active' : 'Deactive' }}</td>
-                        <td><a class="btn btn-info btn-sm" href="{{ url('/category/edit/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>   <a class="btn btn-danger btn-sm" href="{{ url('/category/delete/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a></td>
+                        <td> 
+                            @foreach ($customer_info as $customer)
+                            @if ($row->customer_id == $customer->id)
+                                {{$customer->customer_name}}
+                            @endif
+                            @endforeach
+                        </td>
+                        <td>{{ $row->date }}</td>
+                        <td>{{ $row->total_amount }}</td>
+                        <td><a class="btn btn-info btn-sm" href="{{ url('/invoice/edit/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>   <a class="btn btn-danger btn-sm" href="{{ url('/category/delete/'.$row->id) }}"><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a></td>
                     </tr>
                     @endforeach
-
+                    <tr class="text-center">
+                        <td colspan="3" >
+                             
+                        </td>
+                        <td>
+                            {{$totalAmount}}
+                        </td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
             </div>
@@ -80,29 +96,7 @@
 
 
 
-<!-- Delete Category ajax code -->
-<script type="text/javascript">
-    //Delete Category 
-    $(".DeleteCategory").click(function ()
-    {
-        var category_id = $(this).attr('name');
-        var csrf_test_name = $("[name=csrf_test_name]").val();
-        var x = confirm("Are You Sure,Want to Delete ?");
-        if (x == true) {
-            $.ajax
-                    ({
-                        type: "POST",
-                        url: 'http://localhost/SalesERP/Ccategory/category_delete',
-                        data: {category_id: category_id, csrf_test_name: csrf_test_name},
-                        cache: false,
-                        success: function (datas)
-                        {
-                            alert(datas);
-                        }
-                    });
-        }
-    });
-</script>
+
 
 <!-- tootip text code -->
 <script>

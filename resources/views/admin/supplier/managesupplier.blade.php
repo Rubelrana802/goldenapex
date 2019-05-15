@@ -40,12 +40,12 @@
               <table id="default-datatable" class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr class="text-center">
-                    	<th>supplier ID</th>
-                        <th>supplier name</th>
-                        <th>address</th>
-                        <th>mobile</th>
-                        <th>details</th>
-                        <th>status</th>
+                    	
+                        <th>Supplier Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Previous Due</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -54,13 +54,13 @@
 
                 	@foreach($supplier_info as $supplier_info)
                     <tr class="text-center">
-                        <td>{{ ++$i }}</td>
-                        <td>{{ $supplier_info->supplier_name }}</td>
+                       
+                        <td>{{ $supplier_info->name }}</td>
                         <td>{{ $supplier_info->mobile }}</td>
+                        <td>{{ $supplier_info->email }}</td>
                         <td>{{ $supplier_info->address }}</td>
-                        <td>{{ $supplier_info->details }}</td>
-                        <td>{{ ($supplier_info->status) == 1? 'Active' : 'Unactive' }}</td>
-                        <td><a class="btn btn-info btn-sm" href="{{ url('/supplier/edit/'.$supplier_info->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>   <a class="btn btn-danger btn-sm" href="{{ url('/supplier/delete/'.$supplier_info->id) }}"><i style="font-size: 16px;" class="fa fa-trash" data-toggle="tooltip" title="Delete"></i></a></td>
+                        <td>{{ $supplier_info->previous_due }}</td>
+                        <td><a class="btn btn-info btn-sm" href="{{ url('/supplier/edit/'.$supplier_info->id) }}"><i style="font-size: 16px;" class="fa fa-edit" data-toggle="tooltip" title="Update"></i></a>  </td>
                     </tr>
                     @endforeach
 

@@ -8,7 +8,7 @@
 
 	<div class="card">
 			     <div class="card-body">
-				   <div class="card-title">Update Category</div>
+				   <div class="card-title"> <i class="fa fa-edit"></i> Update Category</div>
 				   <hr>				   
 				    {!! Form::open(['url' => '/category/edit/','method'=>'POST','name'=>'editform']) !!}
 				    <div class="row">
@@ -27,7 +27,7 @@
 					  <div class="col-sm-6">
 						<select name="status" class="form-control">
 							<option value="1">Active</option>
-							<option value="0">Unactive</option>
+							<option value="0">Deactive</option>
 						</select>
 					  </div>
 					</div>

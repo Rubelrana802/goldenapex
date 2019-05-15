@@ -19,13 +19,11 @@ class CreateInvoiceDetailsTable extends Migration
             $table->integer('product_id');
             $table->float('quantity');
             $table->float('rate');
-            $table->float('supplier_rate');
+            
             $table->float('total_price');
             $table->float('discount');
-            $table->string('discount_per');
-            $table->float('tax');
-            $table->float('paid_amount');
-            $table->float('due_amount');
+            
+         
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

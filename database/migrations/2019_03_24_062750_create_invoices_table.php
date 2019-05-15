@@ -16,14 +16,14 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id');
+            $table->integer('inventory_id');
             $table->string('date');
             $table->float('total_amount');
-            $table->string('invoice');
-            $table->float('invoice_discount');
+            $table->string('payment_type');
             $table->float('total_discount');
-            $table->float('total_tax');
+            $table->float('total_discount_two');
             $table->text('invoice_details');
-            $table->boolean('status')->default(true);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
