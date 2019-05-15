@@ -14,9 +14,12 @@ use Illuminate\Support\Facades\Input;
 class invoiceController extends Controller
 {
     public function index() {
-        $day = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $timestemp)->day;
-        dd($day);
-    	return view('admin.invoice.invoiceNew');
+        // $day = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $timestemp)->day;
+        // dd($day);
+        $invoice = invoice::orderBy('id','desc')->paginate(10);
+        $customer_info = customer_info::all();
+        $totalAmount = invoice::sum('total_amount');
+    	return view('admin.invoice.manageInvoice',get_defined_vars());
     }
 
     public function create() {
@@ -98,9 +101,120 @@ class invoiceController extends Controller
                 $stock->save();
             }
         }
-        return redirect('/manage/product/purchase')->with('message','Product Purchase Successfully.');
+        return redirect('/invoice/manage')->with('message','Product Sell Successfully.');
 
     }
+    
+
+    public function edit($id){
+        $invoice =  invoice::find($id);
+        $invoice_details =  invoice_details::where('invoice_id',$invoice->id)->get();
+        $customer_info = customer_info::all();
+        $products = Product::all();
+        $locations = Location::all();
+        return view('admin.invoice.editInvoice',get_defined_vars());
+    }
+
+    public function update(Request $request){
+        
+
+        // return $request->all();
+        $inputs = Input::except(['_token','customer_id','payment_type','inventory_id','status','invoice_details']);
+        
+
+
+        $invoice =  invoice::find($request->invoice_detail_id);
+
+
+        // minus and plus
+        if(count($inputs) > 0){
+            for($i = 0 ; $i < count($inputs['product_quantity']); $i++){
+                $invoice_details =  invoice_details::where('invoice_id',$invoice->id)->where('product_id',$request->product_id[$i])->first();
+
+                $stock = Stock::where('product_id',$invoice_details->product_id)->first();
+                
+                $stock->sell_qty -= $invoice_details->quantity;
+                $stock->purchase_qty += $invoice_details->quantity;
+                $stock->save();
+            }
+        }     
+
+
+        // check product availability 
+        for($i = 0 ; $i < count($inputs['product_quantity']); $i++){
+            $stock = Stock::where('product_id',$request->product_id[$i])->first();
+            if(  $request->product_quantity[$i] > $stock->purchase_qty){
+                return back()->with('message','Unavailable Product Quantity..');
+            }        
+        }
+        // $invoice =  invoice::find($request->invoice_detail_id);
+        // return $invoice;
+        $invoice->date = $request->date;
+        $invoice->customer_id = $request->customer_id;
+        $invoice->payment_type = $request->payment_type;
+        $invoice->status = $request->status;
+        $invoice->inventory_id = $request->inventory_id;
+        $invoice->invoice_details = $request->invoice_details;
+        //grand total
+        $grand_total = 0;
+        if(count($request->product_quantity) > 0){
+            for($i = 0; $i < count($request->product_quantity); $i++){
+                $grand_total  = $request->product_quantity[$i] * $request->product_rate[$i] ;
+                $grand_total  += $grand_total;
+            }
+        }
+       
+        //dis one
+        $discount_one =($grand_total *  $request->discount_per)/100;
+        $invoice->total_discount = $discount_one;
+        $grand_total =  $grand_total - $discount_one;
+        //dis two
+        $discount_two = ($grand_total *  $request->multi_dis)/100;
+        $invoice->total_discount_two = $discount_two ;
+        $grand_total = $grand_total - $discount_two ;
+        
+        $invoice->total_amount = $grand_total;
+        $invoice->save();
+
+        if(count($inputs) > 0){
+            for($i = 0 ; $i < count($inputs['product_quantity']); $i++){
+                $invoice_details =  invoice_details::where('product_id',$request->product_id[$i])->first();
+
+                $stock = Stock::where('product_id',$invoice_details->product_id)->first();
+                
+                $stock->sell_qty -= $invoice_details->quantity;
+                $stock->purchase_qty += $invoice_details->quantity;
+                $stock->save();
+
+
+                $invoice_details->quantity = $request->product_quantity[$i];
+                $invoice_details->rate = $request->product_rate[$i];
+                $total_price = $request->product_quantity[$i] * $request->product_rate[$i];
+                
+                $discount_one = ($total_price * $request->discount_per)/100;
+
+                $total_price = $total_price - $discount_one; 
+
+                $discount_two = ($total_price *  $request->multi_dis)/100;
+
+                $total_price = $total_price - $discount_two;
+
+                $invoice_details->discount = $discount_one + $discount_two ;
+
+                $invoice_details->total_price = $total_price;
+
+                $invoice_details->save();
+                // stock manage
+                $stock = Stock::where('product_id',$invoice_details->product_id)->first();
+                $stock->purchase_qty -= $request->product_quantity[$i];
+                $stock->sell_qty += $request->product_quantity[$i];
+                $stock->save();
+            }
+        }
+        return redirect('/invoice/manage')->with('message','Product Sell Update Successfully.');
+    }
+
+
 
 
 }

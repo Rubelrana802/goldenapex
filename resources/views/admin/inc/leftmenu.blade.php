@@ -17,7 +17,6 @@
         <ul class="sidebar-submenu">
         <li><a href="{{ url('/invoice/create') }}"><i class="fa fa-circle-o"></i> New Invoice</a></li>
         <li><a href="{{ url('/invoice/manage') }}"><i class="fa fa-circle-o"></i> Manage Invoice</a></li>
-        <!-- <li><a href="{{ url('/invoice/pos') }}"><i class="fa fa-circle-o"></i> POS Invoice</a></li> -->
         </ul>
       </li>  
 
